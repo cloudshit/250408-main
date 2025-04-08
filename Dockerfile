@@ -8,6 +8,8 @@ ARG group=1000
 USER $user:$group
 WORKDIR /app
 
-COPY main .
+COPY --chown=$user:$group main .
+
+RUN chmod +x main
 
 ENTRYPOINT ["/app/main"]
