@@ -3,6 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      # Install buildx
+      - export BUILDX_VERSION=$(curl --silent "https://api.github.com/repos/docker/buildx/releases/latest" |jq -r .tag_name)
+      - curl -JLO "https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-amd64"
+      - mkdir -p ~/.docker/cli-plugins
+      - mv "buildx-$BUILDX_VERSION.linux-amd64" ~/.docker/cli-plugins/docker-buildx
+      - chmod +x ~/.docker/cli-plugins/docker-buildx
+
       # Define variables
       - REGISTRY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - REPOSITORY_URI=$REGISTRY_URI/$IMAGE_REPO_NAME
